@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
@@ -133,6 +134,6 @@ public class MovieDatasetReader {
             .map(Double::valueOf)
 
             // Collect the Stream<Double> into an List<Double>.
-            .toList();
+            .collect(Collectors.toList());
     }
 }

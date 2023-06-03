@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.yaml.snakeyaml.util.UriEncoder;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static edu.vandy.recommender.movies.Constants.EndPoint.GET_ALL_MOVIES;
@@ -32,14 +35,14 @@ public class MoviesSyncProxy {
 
         // TODO -- you fill in here, replacing 'null' with the proper
         // code.
-        String url = null;
+        String url = UriComponentsBuilder.fromPath(GET_ALL_MOVIES).build().toUriString();
 
         // Use WebUtils.makeGetRequestList() and mMoviesRestTemplate
         // to get a List of all movies from the 'movie' microservice.
 
         // TODO -- you fill in here, replacing 'null'
         // with the proper code.
-        List<Movie> movies = null;
+        List<Movie> movies = WebUtils.makeGetRequestList(mMoviesRestTemplate, url,Movie[].class);
 
         if (movies == null)
             throw new IllegalStateException
@@ -61,14 +64,17 @@ public class MoviesSyncProxy {
         // "search" endpoint of the 'movies' microservice.
         // TODO -- you fill in here, replacing 'null'
         // with the proper code.
-        String url = null;
+        String url = UriComponentsBuilder
+                .fromPath(GET_SEARCH + "/" + URLEncoder.encode(query, StandardCharsets.UTF_8))
+                .build()
+                .toUriString();
 
         // Use WebUtils.makeGetRequestList() and mMoviesRestTemplate
         // to get a List of all matching movies from the 'movie'
         // microservice.
         // TODO -- you fill in here, replacing 'null'
         // with the proper code.
-        List<Movie> matchingMovies = null;
+        List<Movie> matchingMovies = WebUtils.makeGetRequestList(mMoviesRestTemplate, url, Movie[].class);
 
         if (matchingMovies == null)
             throw new IllegalStateException
@@ -92,14 +98,18 @@ public class MoviesSyncProxy {
 
         // TODO -- you fill in here, replacing 'null' with
         // the proper code.
-        String url = null;
+        String url = UriComponentsBuilder
+                .fromPath(GET_SEARCHES)
+                .queryParam("queries", WebUtils.list2String(queries))
+                .build()
+                .toUriString();
 
         // Use WebUtils.makeGetRequestList() and mMoviesRestTemplate
         // to get a List of all matching movies from the 'movie'
         // microservice.
         // TODO -- you fill in here, replacing 'null'
         // with the proper code.
-        List<Movie> matchingMovies = null;
+        List<Movie> matchingMovies = WebUtils.makeGetRequestList(mMoviesRestTemplate, url, Movie[].class);
 
         if (matchingMovies == null)
             throw new IllegalStateException

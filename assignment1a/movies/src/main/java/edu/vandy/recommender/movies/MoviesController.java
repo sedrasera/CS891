@@ -41,6 +41,13 @@ public class MoviesController {
     // @Bean factory method.
     private MoviesService service;
 
+
+    @Autowired
+    public MoviesController(ApplicationContext applicationContext, MoviesService service) {
+        this.applicationContext = applicationContext;
+        this.service = service;
+    }
+
     /**
      * A request for testing Eureka connection.
      *
@@ -62,6 +69,10 @@ public class MoviesController {
     // GET requests onto a handler method for "all-movies"
     // (GET_ALL_MOVIES) that takes no parameters and forwards to the
     // MoviesService.getMovies() method.
+    @GetMapping(GET_ALL_MOVIES)
+    public List<Movie> getAllMovies() {
+        return service.getMovies();
+    }
 
     /**
      * Search for movie titles in the database containing the given
@@ -75,6 +86,11 @@ public class MoviesController {
     // GET requests onto a handler method for "search" (GET_SEARCH)
     // that uses a @PathVariable parameter and forwards to the
     // MoviesService.search(String query) method.
+    @GetMapping(GET_SEARCH + "/{key}")
+    public List<Movie> searchMovie(@PathVariable("key") String query) {
+        return service.search(query);
+    }
+    
 
     /**
      * Search for movie titles in the database containing the given
@@ -88,4 +104,8 @@ public class MoviesController {
     // GET requests onto a handler method for "searches"
     // (GET_SEARCHES) that uses a @RequestParam parameter and forwards
     // to the MoviesServices.search(List<String> queries) method.
+    @GetMapping(GET_SEARCHES)
+    public List<Movie> getSearches(@RequestParam List<String> queries) {
+        return service.search(queries);
+    }
 }

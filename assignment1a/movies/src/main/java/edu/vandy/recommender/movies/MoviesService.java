@@ -4,9 +4,10 @@ import edu.vandy.recommender.movies.model.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * This class defines implementation methods that are called by the
@@ -27,6 +28,7 @@ public class MoviesService {
      */
     // TODO -- ensure that mMovies is autowired with the appropriate
     // @Bean factory method.
+    @Autowired
     List<Movie> mMovies;
 
     /**
@@ -35,7 +37,7 @@ public class MoviesService {
     public List<Movie> getMovies() {
         // TODO -- you fill in here, replacing 'return null' with
         // the proper code.
-        return null;
+        return mMovies;
     }
 
     /**
@@ -52,7 +54,9 @@ public class MoviesService {
 
         // TODO -- you fill in here, replacing 'return null' with
         // the proper code.
-        return null;
+        return mMovies.stream()
+                .filter(movie -> movie.id().toLowerCase().contains((query.toLowerCase())))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -70,6 +74,9 @@ public class MoviesService {
 
         // TODO -- you fill in here, replacing 'return null' with
         // the proper code.
-        return null;
+        //Set<String> titleSet = new HashSet<>(queries);
+        return mMovies.stream()
+                .filter(movie -> queries.stream().anyMatch(query -> movie.id().toLowerCase().contains(query.toLowerCase())))
+                .collect(Collectors.toList());
    }
 }
